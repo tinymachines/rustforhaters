@@ -37,6 +37,10 @@ Welcome to **Rust for Haters** - educational Rust documentation generated from Y
 - [Chapter 4: Vec — Dynamic Arrays](stdlib/chapter4_vec.md)
 - [Chapter 4: Vec — Dynamic Arrays](stdlib/chapter4_vec_enhanced.md)
 
+**Source Files:**
+- [`box_exploration.rs`](stdlib/box_exploration.rs)
+- [`vec_exploration.rs`](stdlib/vec_exploration.rs)
+
 ### Syntax And Patterns
 
 - [Rust Syntax, Keywords, and Patterns Reference](syntax-and-patterns/rust-syntax-keywords-patterns-reference.md)

@@ -4,13 +4,17 @@ Sync and organize manually-added markdown files in docs/.
 
 Usage:
     python sync_docs.py [--push]
+    python sync_docs.py --delete <path-to-file> [--push]
 
 This script:
-1. Executes git pull to get any new files
+1. Executes git pull to get any new files (and detects deleted files)
 2. Finds markdown files not yet categorized (in docs/ root or lacking metadata)
 3. Uses Claude to determine topic and proper title
 4. Moves files to appropriate topic folders
 5. Regenerates mkdocs.yml and index.md
+
+Delete mode:
+    --delete <path>  Delete a doc file and update navigation
 """
 
 import sys
@@ -29,9 +33,11 @@ from process_transcript import (
 )
 
 
-def git_pull(project_root: Path) -> bool:
-    """Execute git pull and return True if there were changes."""
+def git_pull(project_root: Path) -> tuple[bool, list[str]]:
+    """Execute git pull and return (had_changes, deleted_files)."""
     print("Pulling latest changes...")
+
+    # Get list of files before pull
     try:
         result = subprocess.run(
             ["git", "pull"],
@@ -40,11 +46,86 @@ def git_pull(project_root: Path) -> bool:
             text=True,
             cwd=project_root
         )
-        print(result.stdout.strip() if result.stdout.strip() else "Already up to date.")
-        return "Already up to date" not in result.stdout
+        output = result.stdout.strip()
+        print(output if output else "Already up to date.")
+
+        # Parse deleted files from pull output
+        # Lines like: "delete mode 100644 docs/some-file.md"
+        deleted = []
+        for line in output.split('\n'):
+            if 'delete mode' in line and 'docs/' in line:
+                # Extract the file path
+                parts = line.split()
+                if len(parts) >= 4:
+                    deleted.append(parts[-1])
+
+        had_changes = "Already up to date" not in output
+        return had_changes, deleted
+
     except subprocess.CalledProcessError as e:
         print(f"Git pull failed: {e.stderr}")
-        return False
+        return False, []
+
+
+def delete_doc(filepath: Path, docs_dir: Path, project_root: Path, auto_push: bool):
+    """Delete a document file and update navigation."""
+    if not filepath.exists():
+        print(f"Error: File not found: {filepath}")
+        sys.exit(1)
+
+    if not str(filepath).startswith(str(docs_dir)):
+        print(f"Error: File must be within docs/ directory")
+        sys.exit(1)
+
+    rel_path = filepath.relative_to(project_root)
+    print(f"Deleting: {rel_path}")
+
+    # Remove the file
+    filepath.unlink()
+
+    # Check if parent folder is now empty (except for README/index)
+    parent = filepath.parent
+    if parent != docs_dir:
+        remaining = [f for f in parent.iterdir()
+                     if f.name not in ('README.md', 'index.md', '.DS_Store')]
+        if not remaining:
+            # Remove README/index if present
+            for special in ('README.md', 'index.md'):
+                special_path = parent / special
+                if special_path.exists():
+                    special_path.unlink()
+            # Remove empty folder
+            parent.rmdir()
+            print(f"Removed empty folder: {parent.name}/")
+
+    # Regenerate nav
+    regenerate_mkdocs_nav(docs_dir, project_root)
+    regenerate_index(docs_dir)
+
+    # Git commit if enabled
+    if auto_push:
+        try:
+            subprocess.run(
+                ["git", "add", "-A", "docs/", "mkdocs.yml"],
+                check=True,
+                capture_output=True,
+                cwd=project_root
+            )
+            subprocess.run(
+                ["git", "commit", "-m", f"Remove doc: {rel_path.name}"],
+                check=True,
+                capture_output=True,
+                cwd=project_root
+            )
+            subprocess.run(
+                ["git", "push"],
+                check=True,
+                capture_output=True,
+                cwd=project_root
+            )
+            print("Committed and pushed.")
+        except subprocess.CalledProcessError as e:
+            print(f"Git error: {e.stderr.decode() if e.stderr else e}")
 
 
 def find_uncategorized_docs(docs_dir: Path) -> list[Path]:
@@ -241,13 +322,10 @@ def main():
     # Parse arguments
     args = sys.argv[1:]
     push_flag = '--push' in args
+    delete_flag = '--delete' in args
 
     # Load environment
     load_dotenv()
-    api_key = os.getenv('ANTHROPIC_API_KEY')
-    if not api_key:
-        print("Error: ANTHROPIC_API_KEY not found in .env file")
-        sys.exit(1)
 
     auto_push = push_flag or os.getenv('AUTO_PUSH', '').lower() in ('true', '1', 'yes')
 
@@ -255,8 +333,36 @@ def main():
     project_root = Path(__file__).parent
     docs_dir = project_root / "docs"
 
+    # Handle --delete mode
+    if delete_flag:
+        try:
+            delete_idx = args.index('--delete')
+            if delete_idx + 1 >= len(args) or args[delete_idx + 1].startswith('-'):
+                print("Error: --delete requires a file path")
+                print("Usage: python sync_docs.py --delete <path-to-file> [--push]")
+                sys.exit(1)
+            filepath = Path(args[delete_idx + 1])
+            if not filepath.is_absolute():
+                filepath = project_root / filepath
+            delete_doc(filepath, docs_dir, project_root, auto_push)
+            return
+        except ValueError:
+            pass
+
+    # Need API key for categorization
+    api_key = os.getenv('ANTHROPIC_API_KEY')
+    if not api_key:
+        print("Error: ANTHROPIC_API_KEY not found in .env file")
+        sys.exit(1)
+
     # Git pull first
-    git_pull(project_root)
+    had_changes, deleted_files = git_pull(project_root)
+
+    # Report any files deleted remotely
+    if deleted_files:
+        print(f"\nDetected {len(deleted_files)} file(s) deleted remotely:")
+        for f in deleted_files:
+            print(f"  - {f}")
 
     # Find uncategorized docs
     uncategorized = find_uncategorized_docs(docs_dir)

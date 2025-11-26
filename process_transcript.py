@@ -219,6 +219,15 @@ def prettify_topic_name(topic: str) -> str:
     return topic.replace('-', ' ').title()
 
 
+# Source file extensions to include in docs
+SOURCE_EXTENSIONS = {'.rs', '.py', '.c', '.cpp', '.go', '.js', '.ts'}
+
+
+def get_source_title(filepath: Path) -> str:
+    """Generate a title for a source file."""
+    return filepath.name
+
+
 def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
     """Regenerate mkdocs.yml nav section based on docs directory structure."""
     print("Regenerating mkdocs.yml navigation...")
@@ -276,6 +285,16 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
             title = get_doc_title(md_file)
             section_items.append({title: f"{folder.name}/{md_file.name}"})
 
+        # Add source files
+        source_files = []
+        for src_file in sorted(folder.iterdir()):
+            if src_file.is_file() and src_file.suffix in SOURCE_EXTENSIONS:
+                title = get_source_title(src_file)
+                source_files.append({title: f"{folder.name}/{src_file.name}"})
+
+        if source_files:
+            section_items.append({'Source Files': source_files})
+
         if section_items:
             nav.append({section_name: section_items})
 
@@ -297,7 +316,7 @@ def regenerate_index(docs_dir: Path):
 
     # Collect structure
     top_level = []
-    sections = {}
+    sections = {}  # section_name -> {'docs': [...], 'sources': [...]}
 
     for item in sorted(docs_dir.iterdir()):
         if item.name == 'index.md':
@@ -308,14 +327,20 @@ def regenerate_index(docs_dir: Path):
         elif item.is_dir():
             section_name = prettify_topic_name(item.name)
             docs = []
+            sources = []
+
             for md_file in sorted(item.glob("*.md")):
                 if md_file.name in ('README.md', 'index.md'):
-                    # Use as section link
                     continue
                 title = get_doc_title(md_file)
                 docs.append((title, f"{item.name}/{md_file.name}"))
-            if docs:
-                sections[section_name] = docs
+
+            for src_file in sorted(item.iterdir()):
+                if src_file.is_file() and src_file.suffix in SOURCE_EXTENSIONS:
+                    sources.append((src_file.name, f"{item.name}/{src_file.name}"))
+
+            if docs or sources:
+                sections[section_name] = {'docs': docs, 'sources': sources}
 
     # Generate markdown
     lines = [
@@ -336,11 +361,16 @@ def regenerate_index(docs_dir: Path):
         lines.append("")
         lines.append("## Deep Dives")
         lines.append("")
-        for section_name, docs in sections.items():
+        for section_name, content in sections.items():
             lines.append(f"### {section_name}")
             lines.append("")
-            for title, path in docs:
+            for title, path in content['docs']:
                 lines.append(f"- [{title}]({path})")
+            if content['sources']:
+                lines.append("")
+                lines.append("**Source Files:**")
+                for title, path in content['sources']:
+                    lines.append(f"- [`{title}`]({path})")
             lines.append("")
 
     # Add footer

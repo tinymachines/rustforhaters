@@ -46,14 +46,19 @@ python sync_docs.py
 
 # Pull, organize, and push
 python sync_docs.py --push
+
+# Delete a specific doc file
+python sync_docs.py --delete docs/topic/file.md --push
 ```
 
 This script:
-1. Runs `git pull` to fetch new files
+1. Runs `git pull` to fetch new files (and detects remotely deleted files)
 2. Finds uncategorized markdown files (no metadata markers)
 3. Uses Claude to determine topic folder and title
 4. Moves files to appropriate topic folders
 5. Regenerates `mkdocs.yml` and `docs/index.md`
+
+Source files (`.rs`, `.py`, `.c`, etc.) in topic folders are automatically included in a "Source Files" subsection.
 
 ## Pipeline Script
 
