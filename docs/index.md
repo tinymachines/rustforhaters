@@ -37,8 +37,8 @@ Welcome to **Rust for Haters** - educational Rust documentation generated from Y
 - [Chapter 4: Vec — Dynamic Arrays](stdlib/chapter4_vec_enhanced.md)
 
 **Source Files:**
-- `box_exploration.rs` [[src]](stdlib/box_exploration.rs) [[doc]](stdlib/box_exploration.rs.md)
-- `vec_exploration.rs` [[src]](stdlib/vec_exploration.rs) [[doc]](stdlib/vec_exploration.rs.md)
+- `box_exploration.rs` [[src]](stdlib/box_exploration.rs) [[doc]](stdlib/box_exploration-src.md)
+- `vec_exploration.rs` [[src]](stdlib/vec_exploration.rs) [[doc]](stdlib/vec_exploration-src.md)
 
 ### Syntax And Patterns
 

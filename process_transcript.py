@@ -239,6 +239,11 @@ def get_source_title(filepath: Path) -> str:
     return filepath.name
 
 
+def get_wrapper_name(src_file: Path) -> str:
+    """Get wrapper filename: foo.rs -> foo-src.md"""
+    return src_file.stem + '-src.md'
+
+
 def generate_source_wrapper(src_file: Path) -> Path:
     """Generate a markdown wrapper for a source file with syntax highlighting."""
     lang = LANG_MAP.get(src_file.suffix, '')
@@ -250,7 +255,7 @@ def generate_source_wrapper(src_file: Path) -> Path:
 {content}
 ```
 """
-    wrapper_path = src_file.with_suffix(src_file.suffix + '.md')
+    wrapper_path = src_file.parent / get_wrapper_name(src_file)
     wrapper_path.write_text(md_content)
     return wrapper_path
 
@@ -305,12 +310,12 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
         elif index.exists():
             section_items.append({'Overview': f"{folder.name}/index.md"})
 
-        # Add other markdown files (exclude source wrappers like .rs.md)
+        # Add other markdown files (exclude source wrappers like foo-src.md)
         for md_file in sorted(folder.glob("*.md")):
             if md_file.name in ('README.md', 'index.md'):
                 continue
-            # Skip source file wrappers (e.g., foo.rs.md)
-            if any(md_file.name.endswith(ext + '.md') for ext in SOURCE_EXTENSIONS):
+            # Skip source file wrappers (e.g., foo-src.md)
+            if md_file.name.endswith('-src.md'):
                 continue
             title = get_doc_title(md_file)
             section_items.append({title: f"{folder.name}/{md_file.name}"})
@@ -365,17 +370,17 @@ def regenerate_index(docs_dir: Path):
             for md_file in sorted(item.glob("*.md")):
                 if md_file.name in ('README.md', 'index.md'):
                     continue
-                # Skip source file wrappers (e.g., foo.rs.md)
-                if any(md_file.name.endswith(ext + '.md') for ext in SOURCE_EXTENSIONS):
+                # Skip source file wrappers (e.g., foo-src.md)
+                if md_file.name.endswith('-src.md'):
                     continue
                 title = get_doc_title(md_file)
                 docs.append((title, f"{item.name}/{md_file.name}"))
 
             for src_file in sorted(item.iterdir()):
                 if src_file.is_file() and src_file.suffix in SOURCE_EXTENSIONS:
-                    # src = raw file, doc = markdown wrapper
+                    # src = raw file, doc = markdown wrapper (foo-src.md)
                     src_path = f"{item.name}/{src_file.name}"
-                    doc_path = f"{item.name}/{src_file.name}.md"
+                    doc_path = f"{item.name}/{get_wrapper_name(src_file)}"
                     sources.append((src_file.name, src_path, doc_path))
 
             if docs or sources:
