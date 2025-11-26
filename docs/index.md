@@ -34,12 +34,11 @@ Welcome to **Rust for Haters** - educational Rust documentation generated from Y
 - [Chapter 1: Memory Layout and Alignment](stdlib/chapter1_memory_layout.md)
 - [Chapter 2: The Allocator Traits](stdlib/chapter2_allocator_traits.md)
 - [Chapter 3: Box — Owned Heap Allocation](stdlib/chapter3_box.md)
-- [Chapter 4: Vec — Dynamic Arrays](stdlib/chapter4_vec.md)
 - [Chapter 4: Vec — Dynamic Arrays](stdlib/chapter4_vec_enhanced.md)
 
 **Source Files:**
-- [`box_exploration.rs`](stdlib/box_exploration.rs)
-- [`vec_exploration.rs`](stdlib/vec_exploration.rs)
+- `box_exploration.rs` [[src]](stdlib/box_exploration.rs) [[doc]](stdlib/box_exploration.rs.md)
+- `vec_exploration.rs` [[src]](stdlib/vec_exploration.rs) [[doc]](stdlib/vec_exploration.rs.md)
 
 ### Syntax And Patterns
 

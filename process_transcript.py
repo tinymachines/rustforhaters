@@ -222,10 +222,37 @@ def prettify_topic_name(topic: str) -> str:
 # Source file extensions to include in docs
 SOURCE_EXTENSIONS = {'.rs', '.py', '.c', '.cpp', '.go', '.js', '.ts'}
 
+# Map extensions to markdown code fence language
+LANG_MAP = {
+    '.rs': 'rust',
+    '.py': 'python',
+    '.c': 'c',
+    '.cpp': 'cpp',
+    '.go': 'go',
+    '.js': 'javascript',
+    '.ts': 'typescript',
+}
+
 
 def get_source_title(filepath: Path) -> str:
     """Generate a title for a source file."""
     return filepath.name
+
+
+def generate_source_wrapper(src_file: Path) -> Path:
+    """Generate a markdown wrapper for a source file with syntax highlighting."""
+    lang = LANG_MAP.get(src_file.suffix, '')
+    content = src_file.read_text()
+
+    md_content = f"""# {src_file.name}
+
+```{lang}
+{content}
+```
+"""
+    wrapper_path = src_file.with_suffix(src_file.suffix + '.md')
+    wrapper_path.write_text(md_content)
+    return wrapper_path
 
 
 def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
@@ -278,19 +305,25 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
         elif index.exists():
             section_items.append({'Overview': f"{folder.name}/index.md"})
 
-        # Add other markdown files
+        # Add other markdown files (exclude source wrappers like .rs.md)
         for md_file in sorted(folder.glob("*.md")):
             if md_file.name in ('README.md', 'index.md'):
+                continue
+            # Skip source file wrappers (e.g., foo.rs.md)
+            if any(md_file.name.endswith(ext + '.md') for ext in SOURCE_EXTENSIONS):
                 continue
             title = get_doc_title(md_file)
             section_items.append({title: f"{folder.name}/{md_file.name}"})
 
-        # Add source files
+        # Add source files (generate markdown wrappers)
         source_files = []
         for src_file in sorted(folder.iterdir()):
             if src_file.is_file() and src_file.suffix in SOURCE_EXTENSIONS:
+                # Generate markdown wrapper
+                wrapper_path = generate_source_wrapper(src_file)
                 title = get_source_title(src_file)
-                source_files.append({title: f"{folder.name}/{src_file.name}"})
+                # Link to the markdown wrapper (readable with syntax highlighting)
+                source_files.append({title: f"{folder.name}/{wrapper_path.name}"})
 
         if source_files:
             section_items.append({'Source Files': source_files})
@@ -332,12 +365,18 @@ def regenerate_index(docs_dir: Path):
             for md_file in sorted(item.glob("*.md")):
                 if md_file.name in ('README.md', 'index.md'):
                     continue
+                # Skip source file wrappers (e.g., foo.rs.md)
+                if any(md_file.name.endswith(ext + '.md') for ext in SOURCE_EXTENSIONS):
+                    continue
                 title = get_doc_title(md_file)
                 docs.append((title, f"{item.name}/{md_file.name}"))
 
             for src_file in sorted(item.iterdir()):
                 if src_file.is_file() and src_file.suffix in SOURCE_EXTENSIONS:
-                    sources.append((src_file.name, f"{item.name}/{src_file.name}"))
+                    # src = raw file, doc = markdown wrapper
+                    src_path = f"{item.name}/{src_file.name}"
+                    doc_path = f"{item.name}/{src_file.name}.md"
+                    sources.append((src_file.name, src_path, doc_path))
 
             if docs or sources:
                 sections[section_name] = {'docs': docs, 'sources': sources}
@@ -369,8 +408,8 @@ def regenerate_index(docs_dir: Path):
             if content['sources']:
                 lines.append("")
                 lines.append("**Source Files:**")
-                for title, path in content['sources']:
-                    lines.append(f"- [`{title}`]({path})")
+                for name, src_path, doc_path in content['sources']:
+                    lines.append(f"- `{name}` [[src]]({src_path}) [[doc]]({doc_path})")
             lines.append("")
 
     # Add footer

@@ -49,11 +49,10 @@ nav:
   - 'Chapter 1: Memory Layout and Alignment': stdlib/chapter1_memory_layout.md
   - 'Chapter 2: The Allocator Traits': stdlib/chapter2_allocator_traits.md
   - 'Chapter 3: Box — Owned Heap Allocation': stdlib/chapter3_box.md
-  - 'Chapter 4: Vec — Dynamic Arrays': stdlib/chapter4_vec.md
   - 'Chapter 4: Vec — Dynamic Arrays': stdlib/chapter4_vec_enhanced.md
   - Source Files:
-    - box_exploration.rs: stdlib/box_exploration.rs
-    - vec_exploration.rs: stdlib/vec_exploration.rs
+    - box_exploration.rs: stdlib/box_exploration.rs.md
+    - vec_exploration.rs: stdlib/vec_exploration.rs.md
 - Syntax And Patterns:
   - Rust Syntax, Keywords, and Patterns Reference: syntax-and-patterns/rust-syntax-keywords-patterns-reference.md
 - Toolchain:
