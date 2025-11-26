@@ -24,3 +24,14 @@ target
 #.idea/
 
 projects
+
+# MkDocs build output
+site/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+external/

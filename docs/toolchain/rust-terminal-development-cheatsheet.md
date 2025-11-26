@@ -425,3 +425,6 @@ cargo asm --lib --rust my_function
 # Check type sizes
 RUSTFLAGS="-Zprint-type-sizes" cargo +nightly build 2>&1 | grep MyType
 ```
+
+
+<!-- ProcessedBy: sync_docs -->

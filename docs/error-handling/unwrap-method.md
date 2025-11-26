@@ -251,3 +251,6 @@ This tells the CPU to assume the happy path and not waste cache/pipeline resourc
 It's a safety valve that maintains memory safety while acknowledging that sometimes you really do know better than the type system, or you're just prototyping and proper error handling can come later.
 
 The key is that it's **explicit, searchable, and safe** even when you're wrong - it crashes cleanly instead of corrupting memory.
+
+
+<!-- ProcessedBy: sync_docs -->

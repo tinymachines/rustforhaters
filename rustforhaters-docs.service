@@ -1,0 +1,15 @@
+[Unit]
+Description=Rust for Haters Documentation Server (MkDocs)
+After=network.target
+
+[Service]
+Type=simple
+User=bisenbek
+WorkingDirectory=/home/bisenbek/projects/tinymachines/rustforhaters
+Environment="PATH=/home/bisenbek/.pyenv/versions/nominate/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/bisenbek/.pyenv/versions/nominate/bin/mkdocs serve --dev-addr 0.0.0.0:8764
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

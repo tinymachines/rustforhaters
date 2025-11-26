@@ -1144,3 +1144,6 @@ print_str(&boxed);  // Deref coercion: &MyBox<String> -> &String -> &str
 ---
 
 *This reference covers Rust 1.70+ syntax and patterns.*
+
+
+<!-- ProcessedBy: sync_docs -->

@@ -1,4 +1,4 @@
-# Section 1: Board Representation & Core Types (Lines 15-131)
+# Chess Engine: 0x88 Board Representation & Core Types
 
 ## Overview
 This chess engine uses the **0x88 board representation**, a clever trick for efficient board bounds checking. This section establishes the fundamental data structures and utility functions that the rest of the engine builds upon.
@@ -149,3 +149,6 @@ for offset in knight_offsets {
 ---
 
 **Next Section Preview:** The Board State section builds on this foundation to manage the complete game state, including castling rights, en passant, and move history.
+
+
+<!-- ProcessedBy: sync_docs -->
