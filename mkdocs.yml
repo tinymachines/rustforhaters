@@ -38,10 +38,114 @@ nav:
   - Comprehensive Rust Learning Documentation: comprehensive-learning-guide/comprehensive-rust-learning-documentation.md
 - Error Handling:
   - The `.unwrap()` Method in Rust: error-handling/unwrap-method.md
+- Lectures:
+  - Ripgrep:
+    - Overview: lectures/ripgrep/index.md
+    - Lectures:
+      - 'ripgrep crates/grep/src/lib.rs: The Facade Pattern': lectures/ripgrep/lectures/01_the_facade_pattern.md
+      - 'ripgrep crates/grep/src/lib.rs: The Umbrella Crate': lectures/ripgrep/lectures/01_the_umbrella_crate.md
+      - 'ripgrep crates/core/main.rs: Application Entry Point': lectures/ripgrep/lectures/02_application_entry_point.md
+      - 'ripgrep crates/grep/examples/simplegrep.rs: Minimal Working Example': lectures/ripgrep/lectures/02_minimal_working_example.md
+      - 'ripgrep crates/core/logger.rs: Logging Infrastructure': lectures/ripgrep/lectures/03_logging_infrastructure.md
+      - 'ripgrep crates/matcher/src/lib.rs: The Matcher Trait': lectures/ripgrep/lectures/03_the_matcher_trait.md
+      - 'ripgrep crates/matcher/src/interpolate.rs: Capture Group Interpolation': lectures/ripgrep/lectures/04_capture_group_interpolation.md
+      - 'ripgrep crates/searcher/src/sink.rs: The Sink Trait': lectures/ripgrep/lectures/05_the_sink_trait.md
+      - 'ripgrep crates/regex/src/lib.rs: Regex Crate Entry': lectures/ripgrep/lectures/06_regex_crate_entry.md
+      - 'ripgrep crates/regex/src/config.rs: Regex Configuration': lectures/ripgrep/lectures/07_regex_configuration.md
+      - 'ripgrep crates/regex/src/matcher.rs: Implementing Matcher': lectures/ripgrep/lectures/08_implementing_matcher.md
+      - 'ripgrep crates/regex/src/literal.rs: Literal Optimization': lectures/ripgrep/lectures/09_literal_optimization.md
+      - 'ripgrep crates/regex/src/ast.rs: AST Manipulation': lectures/ripgrep/lectures/10_ast_manipulation.md
+      - 'ripgrep crates/searcher/src/lib.rs: Searcher Overview': lectures/ripgrep/lectures/11_searcher_overview.md
+      - 'ripgrep crates/searcher/src/line_buffer.rs: Efficient Line Reading': lectures/ripgrep/lectures/12_efficient_line_reading.md
+      - 'ripgrep crates/searcher/src/lines.rs: Line Handling Utilities': lectures/ripgrep/lectures/13_line_handling_utilities.md
+      - 'ripgrep crates/searcher/src/searcher/mod.rs: Searcher Core': lectures/ripgrep/lectures/14_searcher_core.md
+      - 'ripgrep crates/searcher/src/searcher/core.rs: Search Algorithm': lectures/ripgrep/lectures/15_search_algorithm.md
+      - 'ripgrep crates/searcher/src/searcher/mmap.rs: Memory Mapping': lectures/ripgrep/lectures/16_memory_mapping.md
+      - 'ripgrep crates/printer/src/lib.rs: Printer Architecture': lectures/ripgrep/lectures/17_printer_architecture.md
+      - 'ripgrep crates/printer/src/color.rs: Terminal Colors': lectures/ripgrep/lectures/18_terminal_colors.md
+      - 'ripgrep crates/printer/src/util.rs: Printer Utilities': lectures/ripgrep/lectures/19_printer_utilities.md
+      - 'ripgrep crates/printer/src/json.rs: JSON Output': lectures/ripgrep/lectures/21_json_output.md
+      - 'ripgrep crates/printer/src/summary.rs: Summary Output': lectures/ripgrep/lectures/22_summary_output.md
+      - 'ripgrep crates/globset/src/lib.rs: Glob Pattern Matching': lectures/ripgrep/lectures/23_glob_pattern_matching.md
+      - 'ripgrep crates/globset/src/glob.rs: Glob Implementation': lectures/ripgrep/lectures/24_glob_implementation.md
+      - 'ripgrep crates/ignore/src/lib.rs: Ignore Crate Overview': lectures/ripgrep/lectures/25_ignore_crate_overview.md
+      - 'ripgrep crates/ignore/src/gitignore.rs: Gitignore Parsing': lectures/ripgrep/lectures/26_gitignore_parsing.md
+      - 'ripgrep crates/ignore/src/types.rs: File Type Definitions': lectures/ripgrep/lectures/27_file_type_definitions.md
+      - 'ripgrep crates/ignore/src/walk.rs: Parallel Directory Walking': lectures/ripgrep/lectures/28_parallel_directory_walking.md
+      - 'ripgrep crates/cli/src/lib.rs: CLI Utilities Overview': lectures/ripgrep/lectures/29_cli_utilities_overview.md
+      - 'ripgrep crates/cli/src/decompress.rs: Decompression Support': lectures/ripgrep/lectures/30_decompression_support.md
+      - 'ripgrep crates/cli/src/process.rs: Process Management': lectures/ripgrep/lectures/31_process_management.md
+      - 'ripgrep crates/core/main.rs: Application Entry Point': lectures/ripgrep/lectures/32_application_entry_point.md
+      - 'ripgrep crates/core/flags/mod.rs: Flag System Architecture': lectures/ripgrep/lectures/33_flag_system_architecture.md
+      - 'ripgrep crates/core/flags/lowargs.rs: Low-Level Arguments': lectures/ripgrep/lectures/34_low-level_arguments.md
+      - 'ripgrep crates/core/flags/hiargs.rs: High-Level Arguments': lectures/ripgrep/lectures/35_high-level_arguments.md
+      - 'ripgrep crates/core/search.rs: Search Orchestration': lectures/ripgrep/lectures/36_search_orchestration.md
+      - 'ripgrep crates/core/haystack.rs: Haystack Discovery': lectures/ripgrep/lectures/37_haystack_discovery.md
+    - Companions:
+      - 'ripgrep crates/grep/src/lib.rs: Code Companion': lectures/ripgrep/companions/01_the_facade_pattern_companion.md
+      - 'ripgrep crates/grep/src/lib.rs: Code Companion': lectures/ripgrep/companions/01_the_umbrella_crate_companion.md
+      - 'ripgrep crates/core/main.rs: Code Companion': lectures/ripgrep/companions/02_application_entry_point_companion.md
+      - 'ripgrep crates/grep/examples/simplegrep.rs: Code Companion': lectures/ripgrep/companions/02_minimal_working_example_companion.md
+      - 'ripgrep crates/core/logger.rs: Code Companion': lectures/ripgrep/companions/03_logging_infrastructure_companion.md
+      - 'The Matcher Trait: Code Companion': lectures/ripgrep/companions/03_the_matcher_trait_companion.md
+      - 'Capture Group Interpolation: Code Companion': lectures/ripgrep/companions/04_capture_group_interpolation_companion.md
+      - 'The Sink Trait: Code Companion': lectures/ripgrep/companions/05_the_sink_trait_companion.md
+      - 'ripgrep crates/regex/src/lib.rs: Code Companion': lectures/ripgrep/companions/06_regex_crate_entry_companion.md
+      - 'ripgrep crates/regex/src/config.rs: Code Companion': lectures/ripgrep/companions/07_regex_configuration_companion.md
+      - 'ripgrep crates/regex/src/matcher.rs: Code Companion': lectures/ripgrep/companions/08_implementing_matcher_companion.md
+      - 'ripgrep crates/regex/src/literal.rs: Code Companion': lectures/ripgrep/companions/09_literal_optimization_companion.md
+      - 'ripgrep crates/regex/src/ast.rs: Code Companion': lectures/ripgrep/companions/10_ast_manipulation_companion.md
+      - 'ripgrep crates/searcher/src/lib.rs: Code Companion': lectures/ripgrep/companions/11_searcher_overview_companion.md
+      - 'ripgrep crates/searcher/src/line_buffer.rs: Code Companion': lectures/ripgrep/companions/12_efficient_line_reading_companion.md
+      - 'ripgrep crates/searcher/src/lines.rs: Code Companion': lectures/ripgrep/companions/13_line_handling_utilities_companion.md
+      - 'ripgrep crates/searcher/src/searcher/mod.rs: Code Companion': lectures/ripgrep/companions/14_searcher_core_companion.md
+      - 'ripgrep crates/searcher/src/searcher/core.rs: Code Companion': lectures/ripgrep/companions/15_search_algorithm_companion.md
+      - 'ripgrep crates/searcher/src/searcher/mmap.rs: Code Companion': lectures/ripgrep/companions/16_memory_mapping_companion.md
+      - 'ripgrep crates/printer/src/lib.rs: Code Companion': lectures/ripgrep/companions/17_printer_architecture_companion.md
+      - 'ripgrep crates/printer/src/color.rs: Code Companion': lectures/ripgrep/companions/18_terminal_colors_companion.md
+      - 'ripgrep crates/printer/src/util.rs: Code Companion': lectures/ripgrep/companions/19_printer_utilities_companion.md
+      - 'ripgrep crates/printer/src/json.rs: Code Companion': lectures/ripgrep/companions/21_json_output_companion.md
+      - 'ripgrep crates/printer/src/summary.rs: Code Companion': lectures/ripgrep/companions/22_summary_output_companion.md
+      - 'ripgrep crates/globset/src/lib.rs: Code Companion': lectures/ripgrep/companions/23_glob_pattern_matching_companion.md
+      - 'ripgrep crates/globset/src/glob.rs: Code Companion': lectures/ripgrep/companions/24_glob_implementation_companion.md
+      - 'Ignore Crate Overview: Code Companion': lectures/ripgrep/companions/25_ignore_crate_overview_companion.md
+      - 'Gitignore Parsing: Code Companion': lectures/ripgrep/companions/26_gitignore_parsing_companion.md
+      - 'ripgrep crates/ignore/src/types.rs: Code Companion': lectures/ripgrep/companions/27_file_type_definitions_companion.md
+      - 'Parallel Directory Walking: Code Companion': lectures/ripgrep/companions/28_parallel_directory_walking_companion.md
+      - 'ripgrep crates/cli/src/lib.rs: Code Companion': lectures/ripgrep/companions/29_cli_utilities_overview_companion.md
+      - 'Decompression Support: Code Companion': lectures/ripgrep/companions/30_decompression_support_companion.md
+      - 'ripgrep crates/cli/src/process.rs: Code Companion': lectures/ripgrep/companions/31_process_management_companion.md
+      - 'ripgrep crates/core/main.rs: Code Companion': lectures/ripgrep/companions/32_application_entry_point_companion.md
+      - 'ripgrep crates/core/flags/mod.rs: Code Companion': lectures/ripgrep/companions/33_flag_system_architecture_companion.md
+      - 'Low-Level Arguments: Code Companion': lectures/ripgrep/companions/34_low-level_arguments_companion.md
+      - 'ripgrep crates/core/flags/hiargs.rs: Code Companion': lectures/ripgrep/companions/35_high-level_arguments_companion.md
+      - 'ripgrep crates/core/search.rs: Code Companion': lectures/ripgrep/companions/36_search_orchestration_companion.md
+      - 'ripgrep crates/core/haystack.rs: Code Companion': lectures/ripgrep/companions/37_haystack_discovery_companion.md
+    - Samples:
+      - 'Chapter: The Ignore Crate — Intelligent File Discovery': lectures/ripgrep/samples/ignore_crate_intro.md
+      - 'Ignore Crate lib.rs: Code Companion': lectures/ripgrep/samples/ignore_lib_code.md
+      - 'Ignore Crate lib.rs: Foundation Types': lectures/ripgrep/samples/ignore_lib_lecture.md
+      - 'Ripgrep Autopsy: Anatomy of an Idiomatic Rust CLI Application': lectures/ripgrep/samples/ripgrep_autopsy.md
+      - 'Ripgrep haystack.rs: Code Companion': lectures/ripgrep/samples/ripgrep_haystack_code.md
+      - 'Ripgrep haystack.rs: The Search Target Abstraction': lectures/ripgrep/samples/ripgrep_haystack_lecture.md
+      - 'Ripgrep hiargs.rs: Code Companion': lectures/ripgrep/samples/ripgrep_hiargs_code.md
+      - 'Ripgrep hiargs.rs: The Configuration Oracle': lectures/ripgrep/samples/ripgrep_hiargs_lecture.md
+      - 'Ripgrep logger.rs: Code Companion': lectures/ripgrep/samples/ripgrep_logger_code.md
+      - 'Ripgrep logger.rs: Minimal Debug Logging': lectures/ripgrep/samples/ripgrep_logger_lecture.md
+      - 'Ripgrep lowargs.rs: Code Companion': lectures/ripgrep/samples/ripgrep_lowargs_code.md
+      - 'Ripgrep lowargs.rs: The Raw Flag Mirror': lectures/ripgrep/samples/ripgrep_lowargs_lecture.md
+      - 'Ripgrep main.rs: Code Companion': lectures/ripgrep/samples/ripgrep_main_code.md
+      - 'Ripgrep main.rs: The Orchestrator': lectures/ripgrep/samples/ripgrep_main_lecture.md
+      - 'Ripgrep messages.rs: Code Companion': lectures/ripgrep/samples/ripgrep_messages_code.md
+      - 'Ripgrep messages.rs: Thread-Safe Output Infrastructure': lectures/ripgrep/samples/ripgrep_messages_lecture.md
+      - 'Ripgrep search.rs: Code Companion': lectures/ripgrep/samples/ripgrep_search_code.md
+      - 'Ripgrep search.rs: The Search Coordinator': lectures/ripgrep/samples/ripgrep_search_lecture.md
 - Memory:
   - 'Advanced Rust: Ownership, Borrowing, and Encapsulation': memory/advanced-rust-ownership-borrowing-and-encapsulation.md
   - 'Advanced Rust Programming: Ownership, Borrowing, and Encapsulation': memory/advanced-rust-programming-ownership-borrowing-and-encapsulation-1.md
   - 'Advanced Rust Programming: Ownership, Borrowing, and Encapsulation': memory/advanced-rust-programming-ownership-borrowing-and-encapsulation.md
+- Ripgrep:
+  - Overview: ripgrep/index.md
 - Compiler Internals:
   - 'Inside the Rust Compiler: From Source Code to Binary': rust-compiler-internals/inside-the-rust-compiler-from-source-code-to-binary.md
 - Standard Library:
@@ -57,3 +161,6 @@ nav:
   - Rust Syntax, Keywords, and Patterns Reference: syntax-and-patterns/rust-syntax-keywords-patterns-reference.md
 - Toolchain:
   - Rust Terminal Development Cheatsheet: toolchain/rust-terminal-development-cheatsheet.md
+exclude_docs: '**/repo/**
+
+  **/__pycache__/**'

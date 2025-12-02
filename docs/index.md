@@ -48,6 +48,11 @@ Welcome to **Rust for Haters** - educational Rust documentation generated from Y
 
 - [Rust Terminal Development Cheatsheet](toolchain/rust-terminal-development-cheatsheet.md)
 
+
+## Lecture Series
+
+- **[Ripgrep](lectures/ripgrep/index.md)** — 39 lectures
+
 ## Contributing
 
 New documentation is generated using the transcript processing tool:

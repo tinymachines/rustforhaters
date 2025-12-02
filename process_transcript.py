@@ -260,6 +260,75 @@ def generate_source_wrapper(src_file: Path) -> Path:
     return wrapper_path
 
 
+# Folders to ignore in docs
+IGNORE_FOLDERS = {'repo', '__pycache__', '.git'}
+
+
+def build_lecture_series_nav(series_dir: Path, base_path: str) -> list:
+    """Build nav structure for a lecture series (e.g., docs/lectures/ripgrep/)."""
+    items = []
+
+    # Series index
+    index = series_dir / "index.md"
+    if index.exists():
+        items.append({'Overview': f"{base_path}/index.md"})
+
+    # Lectures subfolder
+    lectures_dir = series_dir / "lectures"
+    if lectures_dir.exists():
+        lecture_items = []
+        for md_file in sorted(lectures_dir.glob("*.md")):
+            title = get_doc_title(md_file)
+            lecture_items.append({title: f"{base_path}/lectures/{md_file.name}"})
+        if lecture_items:
+            items.append({'Lectures': lecture_items})
+
+    # Companions subfolder
+    companions_dir = series_dir / "companions"
+    if companions_dir.exists():
+        companion_items = []
+        for md_file in sorted(companions_dir.glob("*.md")):
+            title = get_doc_title(md_file)
+            companion_items.append({title: f"{base_path}/companions/{md_file.name}"})
+        if companion_items:
+            items.append({'Companions': companion_items})
+
+    # Samples subfolder (if exists)
+    samples_dir = series_dir / "samples"
+    if samples_dir.exists():
+        sample_items = []
+        for md_file in sorted(samples_dir.glob("*.md")):
+            if md_file.name == 'index.md':
+                continue
+            title = get_doc_title(md_file)
+            sample_items.append({title: f"{base_path}/samples/{md_file.name}"})
+        if sample_items:
+            items.append({'Samples': sample_items})
+
+    return items
+
+
+def build_lectures_nav(lectures_dir: Path) -> dict:
+    """Build nav structure for the entire lectures folder."""
+    lecture_series = []
+
+    for series in sorted(lectures_dir.iterdir()):
+        if not series.is_dir() or series.name in IGNORE_FOLDERS:
+            continue
+
+        # Check if this is a valid lecture series (has index.md or lectures/ subfolder)
+        has_index = (series / "index.md").exists()
+        has_lectures = (series / "lectures").exists()
+
+        if has_index or has_lectures:
+            series_name = prettify_topic_name(series.name)
+            series_items = build_lecture_series_nav(series, f"lectures/{series.name}")
+            if series_items:
+                lecture_series.append({series_name: series_items})
+
+    return {'Lectures': lecture_series} if lecture_series else None
+
+
 def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
     """Regenerate mkdocs.yml nav section based on docs directory structure."""
     print("Regenerating mkdocs.yml navigation...")
@@ -289,7 +358,7 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
         if item.is_file() and item.suffix == '.md':
             title = get_doc_title(item)
             top_level.append((title, item.name))
-        elif item.is_dir():
+        elif item.is_dir() and item.name not in IGNORE_FOLDERS:
             folders.append(item)
 
     # Add top-level docs
@@ -298,6 +367,12 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
 
     # Add folder sections
     for folder in sorted(folders):
+        # Special handling for lectures
+        if folder.name == 'lectures':
+            lectures_nav = build_lectures_nav(folder)
+            if lectures_nav:
+                nav.append(lectures_nav)
+            continue
         section_name = prettify_topic_name(folder.name)
         section_items = []
 
@@ -339,6 +414,10 @@ def regenerate_mkdocs_nav(docs_dir: Path, project_root: Path):
     # Update config
     config['nav'] = nav
 
+    # Ensure repo folders are excluded from docs
+    if 'exclude_docs' not in config:
+        config['exclude_docs'] = "**/repo/**\n**/__pycache__/**"
+
     # Write back
     with open(mkdocs_path, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
@@ -355,6 +434,7 @@ def regenerate_index(docs_dir: Path):
     # Collect structure
     top_level = []
     sections = {}  # section_name -> {'docs': [...], 'sources': [...]}
+    lecture_series = []  # list of (series_name, index_path, lecture_count)
 
     for item in sorted(docs_dir.iterdir()):
         if item.name == 'index.md':
@@ -362,7 +442,21 @@ def regenerate_index(docs_dir: Path):
         if item.is_file() and item.suffix == '.md':
             title = get_doc_title(item)
             top_level.append((title, item.name))
-        elif item.is_dir():
+        elif item.is_dir() and item.name not in IGNORE_FOLDERS:
+            # Special handling for lectures
+            if item.name == 'lectures':
+                for series in sorted(item.iterdir()):
+                    if not series.is_dir() or series.name in IGNORE_FOLDERS:
+                        continue
+                    series_index = series / "index.md"
+                    lectures_subdir = series / "lectures"
+                    if series_index.exists() or lectures_subdir.exists():
+                        series_name = prettify_topic_name(series.name)
+                        lecture_count = len(list(lectures_subdir.glob("*.md"))) if lectures_subdir.exists() else 0
+                        index_link = f"lectures/{series.name}/index.md" if series_index.exists() else None
+                        lecture_series.append((series_name, index_link, lecture_count))
+                continue
+
             section_name = prettify_topic_name(item.name)
             docs = []
             sources = []
@@ -416,6 +510,18 @@ def regenerate_index(docs_dir: Path):
                 for name, src_path, doc_path in content['sources']:
                     lines.append(f"- `{name}` [[src]]({src_path}) [[doc]]({doc_path})")
             lines.append("")
+
+    # Add lecture series
+    if lecture_series:
+        lines.append("")
+        lines.append("## Lecture Series")
+        lines.append("")
+        for series_name, index_link, lecture_count in lecture_series:
+            if index_link:
+                lines.append(f"- **[{series_name}]({index_link})** — {lecture_count} lectures")
+            else:
+                lines.append(f"- **{series_name}** — {lecture_count} lectures")
+        lines.append("")
 
     # Add footer
     lines.extend([

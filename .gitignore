@@ -35,3 +35,5 @@ __pycache__/
 # Environment
 .env
 external/
+docs/lectures
+docs/ripgrep
