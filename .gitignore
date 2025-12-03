@@ -37,3 +37,5 @@ __pycache__/
 external/
 docs/lectures
 docs/ripgrep
+update_docs.log
+site/

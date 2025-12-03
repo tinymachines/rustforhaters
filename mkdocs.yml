@@ -30,6 +30,11 @@ markdown_extensions:
 - pymdownx.details
 - toc:
     permalink: true
+plugins:
+  - search
+  - to-pdf:
+      output_path: pdf/rust-for-haters.pdf
+      enabled_if_env: ENABLE_PDF_EXPORT
 nav:
 - Home: index.md
 - Advanced Data Structures:
@@ -140,6 +145,24 @@ nav:
       - 'Ripgrep messages.rs: Thread-Safe Output Infrastructure': lectures/ripgrep/samples/ripgrep_messages_lecture.md
       - 'Ripgrep search.rs: Code Companion': lectures/ripgrep/samples/ripgrep_search_code.md
       - 'Ripgrep search.rs: The Search Coordinator': lectures/ripgrep/samples/ripgrep_search_lecture.md
+  - Rust Memory Safety Examples:
+    - Overview: lectures/rust-memory-safety-examples/index.md
+    - Lectures:
+      - 'rust-memory-safety-examples examples/buffer_overflow_prevention.rs: First Encounter: Running Safe Code': lectures/rust-memory-safety-examples/lectures/01_first_encounter_running_safe_code.md
+      - 'rust-memory-safety-examples src/lib.rs: The Big Picture: Memory Safety Taxonomy': lectures/rust-memory-safety-examples/lectures/02_the_big_picture_memory_safety_taxonomy.md
+      - 'rust-memory-safety-examples src/buffer_overflow_prevention.rs: Bounds Checking Deep Dive': lectures/rust-memory-safety-examples/lectures/03_bounds_checking_deep_dive.md
+      - 'rust-memory-safety-examples examples/use_after_free_prevention.rs: Ownership in Action': lectures/rust-memory-safety-examples/lectures/04_ownership_in_action.md
+      - 'rust-memory-safety-examples src/use_after_free_prevention.rs: Ownership and Lifetimes Mastery': lectures/rust-memory-safety-examples/lectures/05_ownership_and_lifetimes_mastery.md
+      - 'rust-memory-safety-examples examples/data_race_prevention.rs: Concurrent Code Introduction': lectures/rust-memory-safety-examples/lectures/06_concurrent_code_introduction.md
+      - 'rust-memory-safety-examples src/data_race_prevention.rs: Thread Safety Through Types': lectures/rust-memory-safety-examples/lectures/07_thread_safety_through_types.md
+    - Companions:
+      - 'First Encounter: Running Safe Code: Code Companion': lectures/rust-memory-safety-examples/companions/01_first_encounter_running_safe_code_companion.md
+      - 'The Big Picture: Memory Safety Taxonomy: Code Companion': lectures/rust-memory-safety-examples/companions/02_the_big_picture_memory_safety_taxonomy_companion.md
+      - 'Bounds Checking Deep Dive: Code Companion': lectures/rust-memory-safety-examples/companions/03_bounds_checking_deep_dive_companion.md
+      - 'rust-memory-safety-examples examples/use_after_free_prevention.rs: Code Companion': lectures/rust-memory-safety-examples/companions/04_ownership_in_action_companion.md
+      - 'rust-memory-safety-examples src/use_after_free_prevention.rs: Code Companion': lectures/rust-memory-safety-examples/companions/05_ownership_and_lifetimes_mastery_companion.md
+      - 'rust-memory-safety-examples examples/data_race_prevention.rs: Code Companion': lectures/rust-memory-safety-examples/companions/06_concurrent_code_introduction_companion.md
+      - 'rust-memory-safety-examples src/data_race_prevention.rs: Code Companion': lectures/rust-memory-safety-examples/companions/07_thread_safety_through_types_companion.md
 - Memory:
   - 'Advanced Rust: Ownership, Borrowing, and Encapsulation': memory/advanced-rust-ownership-borrowing-and-encapsulation.md
   - 'Advanced Rust Programming: Ownership, Borrowing, and Encapsulation': memory/advanced-rust-programming-ownership-borrowing-and-encapsulation-1.md
